@@ -10,10 +10,13 @@
   var API_BASE = window.ANAS_API_BASE || "";
 
   function currentLang() {
-    return (window.ANAS_I18N_ENGINE && window.ANAS_I18N_ENGINE.current()) || "uz";
+    return (
+      (window.ANAS_I18N_ENGINE && window.ANAS_I18N_ENGINE.current()) || "uz"
+    );
   }
   function t(key) {
-    if (window.ANAS_I18N_ENGINE) return window.ANAS_I18N_ENGINE.t(key, currentLang());
+    if (window.ANAS_I18N_ENGINE)
+      return window.ANAS_I18N_ENGINE.t(key, currentLang());
     return key;
   }
 
@@ -28,12 +31,13 @@
       tour.badgeType === "sale"
         ? "badge_sale"
         : tour.badge === "Premium"
-        ? "badge_premium"
-        : tour.badge
-        ? "badge_popular"
-        : null;
+          ? "badge_premium"
+          : tour.badge
+            ? "badge_popular"
+            : null;
     var badgeText = badgeKey ? t(badgeKey) : "";
-    var badgeClass = tour.badgeType === "sale" ? "tour-badge sale" : "tour-badge";
+    var badgeClass =
+      tour.badgeType === "sale" ? "tour-badge sale" : "tour-badge";
 
     var col = document.createElement("div");
     col.className = "col-12 col-sm-6 col-lg-4";
@@ -45,7 +49,9 @@
       '" alt="' +
       tour.title +
       '" loading="lazy">' +
-      (badgeText ? '<span class="' + badgeClass + '">' + badgeText + "</span>" : "") +
+      (badgeText
+        ? '<span class="' + badgeClass + '">' + badgeText + "</span>"
+        : "") +
       "</div>" +
       '<div class="tour-body">' +
       '<span class="tour-region">' +
@@ -216,51 +222,169 @@
     });
   }
 
-  /* ---- Registration modal (phone-number sign up) ---- */
-  function initRegisterForm() {
-    var form = document.getElementById("registerForm");
-    if (!form) return;
-    form.addEventListener("submit", function (e) {
+  /* ---- Registration modal — Step 1: send SMS code, Step 2: verify ---- */
+  function initRegisterFlow() {
+    var step1 = document.getElementById("regStep1");
+    var step2 = document.getElementById("regStep2");
+    var formStep1 = document.getElementById("registerFormStep1");
+    var formStep2 = document.getElementById("registerFormStep2");
+    if (!step1 || !step2 || !formStep1 || !formStep2) return;
+
+    var sendBtn = document.getElementById("regSendCodeBtn");
+    var verifyBtn = document.getElementById("regVerifyBtn");
+    var resendBtn = document.getElementById("regResendBtn");
+    var step1Err = document.getElementById("regStep1Error");
+    var step2Err = document.getElementById("regStep2Error");
+    var phoneDisplay = document.getElementById("regPhoneDisplay");
+    var changePhoneLink = document.getElementById("regChangePhone");
+    var modalEl = document.getElementById("registerModal");
+
+    var pendingName = "";
+    var pendingPhone = "";
+    var resendTimer = null;
+
+    function showErr(el, msg) {
+      el.textContent = msg;
+      el.classList.remove("d-none");
+    }
+    function hideErr(el) {
+      el.classList.add("d-none");
+    }
+
+    function resetToStep1() {
+      clearInterval(resendTimer);
+      step2.classList.add("d-none");
+      step1.classList.remove("d-none");
+      hideErr(step1Err);
+      hideErr(step2Err);
+      formStep2.reset();
+      formStep2.classList.remove("was-validated");
+    }
+
+    function startResendCooldown(seconds) {
+      var remaining = seconds;
+      resendBtn.disabled = true;
+      function tick() {
+        var template = t("reg_resend_wait") || "Resend ({s}s)";
+        resendBtn.textContent = template.replace("{s}", remaining);
+        remaining -= 1;
+        if (remaining < 0) {
+          clearInterval(resendTimer);
+          resendBtn.disabled = false;
+          resendBtn.textContent = t("reg_resend");
+        }
+      }
+      clearInterval(resendTimer);
+      tick();
+      resendTimer = setInterval(tick, 1000);
+    }
+
+    function requestCode() {
+      hideErr(step1Err);
+      var originalText = sendBtn.textContent;
+      sendBtn.disabled = true;
+      sendBtn.textContent = t("reg_sending_code");
+
+      return fetch(API_BASE + "/api/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: pendingName,
+          phone: pendingPhone,
+          lang: currentLang(),
+        }),
+      })
+        .then(function (res) {
+          return res.json().then(function (body) {
+            if (!res.ok || !body.ok) throw body;
+            return body;
+          });
+        })
+        .then(function () {
+          phoneDisplay.textContent = pendingPhone;
+          step1.classList.add("d-none");
+          step2.classList.remove("d-none");
+          document.getElementById("rCode").focus();
+          startResendCooldown(60);
+        })
+        .catch(function (err) {
+          if (err && err.error === "cooldown" && err.wait_seconds) {
+            showErr(step1Err, t("reg_otp_send_error"));
+          } else {
+            showErr(step1Err, t("reg_otp_send_error"));
+          }
+        })
+        .finally(function () {
+          sendBtn.disabled = false;
+          sendBtn.textContent = originalText;
+        });
+    }
+
+    formStep1.addEventListener("submit", function (e) {
       e.preventDefault();
-      if (!form.checkValidity()) {
-        form.classList.add("was-validated");
+      if (!formStep1.checkValidity()) {
+        formStep1.classList.add("was-validated");
         return;
       }
+      pendingName = document.getElementById("rName").value.trim();
+      pendingPhone = document.getElementById("rPhone").value.trim();
+      requestCode();
+    });
 
-      var submitBtn = form.querySelector('button[type="submit"]');
-      var originalText = submitBtn ? submitBtn.textContent : "";
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = t("reg_sending");
-      }
+    formStep2.addEventListener("submit", function (e) {
+      e.preventDefault();
+      hideErr(step2Err);
+      var code = document.getElementById("rCode").value.trim();
+      if (!code) return;
 
-      var payload = {
-        type: "registration",
-        lang: currentLang(),
-        name: document.getElementById("rName").value.trim(),
-        phone: document.getElementById("rPhone").value.trim(),
-      };
+      var originalText = verifyBtn.textContent;
+      verifyBtn.disabled = true;
+      verifyBtn.textContent = t("reg_sending");
 
-      sendLead(payload)
+      fetch(API_BASE + "/api/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: pendingPhone,
+          code: code,
+          lang: currentLang(),
+        }),
+      })
+        .then(function (res) {
+          return res.json().then(function (body) {
+            if (!res.ok || !body.ok) throw body;
+            return body;
+          });
+        })
         .then(function () {
-          form.reset();
-          form.classList.remove("was-validated");
-          var modalEl = document.getElementById("registerModal");
+          resetToStep1();
+          formStep1.reset();
           if (modalEl && window.bootstrap) {
             window.bootstrap.Modal.getOrCreateInstance(modalEl).hide();
           }
           showToast("successToast");
         })
         .catch(function () {
-          showToast("errorToast");
+          showErr(step2Err, t("reg_code_error"));
         })
         .finally(function () {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalText;
-          }
+          verifyBtn.disabled = false;
+          verifyBtn.textContent = originalText;
         });
     });
+
+    resendBtn.addEventListener("click", function () {
+      requestCode();
+    });
+
+    changePhoneLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      resetToStep1();
+    });
+
+    if (modalEl) {
+      modalEl.addEventListener("hidden.bs.modal", resetToStep1);
+    }
   }
 
   /* ---- Collapse mobile navbar after clicking a link ---- */
@@ -285,7 +409,7 @@
     initScrollSpy();
     initLang();
     initContactForm();
-    initRegisterForm();
+    initRegisterFlow();
     initNavCollapse();
 
     /* Populate featured tours on the home page */

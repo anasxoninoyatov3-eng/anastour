@@ -17,7 +17,8 @@ window.ANAS_I18N = {
     brand_sub: "Aviakassa | Turizm | Viza",
 
     hero_eyebrow: "Aviakassa · Turizm · Viza",
-    hero_title_html: "Dunyo Bo'ylab <span class=\"gold-word\">Unutilmas</span> Sayohatlar",
+    hero_title_html:
+      'Dunyo Bo\'ylab <span class="gold-word">Unutilmas</span> Sayohatlar',
     hero_lead:
       "Aviachiptalar, sayohat turlari va viza xizmatlari — barchasi bir joyda. Anas Tour bilan orzuingizdagi manzillarga qulay va ishonch bilan yeting.",
     hero_btn_tours: "Turlarni ko'rish",
@@ -43,9 +44,11 @@ window.ANAS_I18N = {
     about_text:
       "Anas Tour — yillar davomida minglab mijozlarning ishonchini qozongan sayohat agentligi. Biz aviachiptalar, turizm paketlari va viza xizmatlarini yagona standart va yuqori sifat bilan taqdim etamiz.",
     trust1_title: "Yillik tajriba",
-    trust1_text: "10 yildan ortiq professional sayohat tashkil etish tajribasi.",
+    trust1_text:
+      "10 yildan ortiq professional sayohat tashkil etish tajribasi.",
     trust2_title: "Ishonchli hamkorlar",
-    trust2_text: "Yetakchi aviakompaniyalar va mehmonxonalar bilan bevosita aloqa.",
+    trust2_text:
+      "Yetakchi aviakompaniyalar va mehmonxonalar bilan bevosita aloqa.",
     trust3_title: "24/7 qo'llab-quvvatlash",
     trust3_text: "Sayohatingiz davomida kuniga 24 soat aloqadamiz.",
 
@@ -89,13 +92,25 @@ window.ANAS_I18N = {
     form_submit: "So'rovni yuborish",
 
     reg_modal_title: "Ro'yxatdan o'tish",
-    reg_modal_text: "Telefon raqamingizni qoldiring, mutaxassisimiz tez orada siz bilan bog'lanadi.",
+    reg_modal_text:
+      "Telefon raqamingizni qoldiring, tasdiqlash kodi SMS orqali yuboriladi.",
     reg_name_label: "Ismingiz",
     reg_name_placeholder: "Ism familiya",
     reg_phone_label: "Telefon raqami",
     reg_phone_placeholder: "+998 90 123 45 67",
-    reg_submit: "Ro'yxatdan o'tish",
+    reg_send_code: "SMS kod yuborish",
+    reg_sending_code: "Yuborilmoqda...",
+    reg_code_sent_to: "Kod yuborildi:",
+    reg_change_phone: "raqamni o'zgartirish",
+    reg_code_label: "Tasdiqlash kodi",
+    reg_code_placeholder: "123456",
+    reg_code_error: "Kod noto'g'ri yoki muddati tugagan.",
+    reg_resend: "Kodni qayta yuborish",
+    reg_resend_wait: "Qayta yuborish ({s}s)",
+    reg_submit: "Tasdiqlash va ro'yxatdan o'tish",
     reg_sending: "Yuborilmoqda...",
+    reg_phone_invalid: "Telefon raqamini to'g'ri kiriting.",
+    reg_otp_send_error: "Kod yuborib bo'lmadi. Qaytadan urinib ko'ring.",
 
     footer_desc:
       "Aviakassa, turizm va viza xizmatlari. Dunyo bo'ylab ishonchli va qulay sayohatlar uchun sizning hamrohingiz.",
@@ -107,7 +122,8 @@ window.ANAS_I18N = {
 
     toast_title: "Rahmat!",
     toast_text: "So'rovingiz qabul qilindi. Tez orada bog'lanamiz.",
-    toast_error: "Xatolik yuz berdi. Iltimos, birozdan so'ng qayta urinib ko'ring.",
+    toast_error:
+      "Xatolik yuz berdi. Iltimos, birozdan so'ng qayta urinib ko'ring.",
   },
 
   ru: {
@@ -120,7 +136,8 @@ window.ANAS_I18N = {
     brand_sub: "Авиакасса | Туризм | Виза",
 
     hero_eyebrow: "Авиакасса · Туризм · Виза",
-    hero_title_html: "Незабываемые <span class=\"gold-word\">Путешествия</span> По Всему Миру",
+    hero_title_html:
+      'Незабываемые <span class="gold-word">Путешествия</span> По Всему Миру',
     hero_lead:
       "Авиабилеты, туристические туры и визовые услуги — всё в одном месте. С Anas Tour доберитесь до места мечты удобно и с уверенностью.",
     hero_btn_tours: "Смотреть туры",
@@ -146,11 +163,13 @@ window.ANAS_I18N = {
     about_text:
       "Anas Tour — туристическое агентство, заслужившее доверие тысяч клиентов за годы работы. Мы предоставляем авиабилеты, туристические пакеты и визовые услуги на едином высоком уровне качества.",
     trust1_title: "Многолетний опыт",
-    trust1_text: "Более 10 лет профессионального опыта организации путешествий.",
+    trust1_text:
+      "Более 10 лет профессионального опыта организации путешествий.",
     trust2_title: "Надёжные партнёры",
     trust2_text: "Прямые связи с ведущими авиакомпаниями и отелями.",
     trust3_title: "Поддержка 24/7",
-    trust3_text: "Мы на связи 24 часа в сутки на протяжении всего вашего путешествия.",
+    trust3_text:
+      "Мы на связи 24 часа в сутки на протяжении всего вашего путешествия.",
 
     tours_label: "Популярные направления",
     tours_title: "Избранные Туры",
@@ -192,13 +211,25 @@ window.ANAS_I18N = {
     form_submit: "Отправить заявку",
 
     reg_modal_title: "Регистрация",
-    reg_modal_text: "Оставьте номер телефона, наш специалист свяжется с вами в ближайшее время.",
+    reg_modal_text:
+      "Оставьте номер телефона, код подтверждения будет отправлен по SMS.",
     reg_name_label: "Ваше имя",
     reg_name_placeholder: "Имя и фамилия",
     reg_phone_label: "Номер телефона",
     reg_phone_placeholder: "+998 90 123 45 67",
-    reg_submit: "Зарегистрироваться",
+    reg_send_code: "Отправить SMS-код",
+    reg_sending_code: "Отправка...",
+    reg_code_sent_to: "Код отправлен:",
+    reg_change_phone: "изменить номер",
+    reg_code_label: "Код подтверждения",
+    reg_code_placeholder: "123456",
+    reg_code_error: "Код неверен или истёк.",
+    reg_resend: "Отправить код повторно",
+    reg_resend_wait: "Повторно ({s}с)",
+    reg_submit: "Подтвердить и зарегистрироваться",
     reg_sending: "Отправка...",
+    reg_phone_invalid: "Введите корректный номер телефона.",
+    reg_otp_send_error: "Не удалось отправить код. Попробуйте снова.",
 
     footer_desc:
       "Авиакасса, туризм и визовые услуги. Ваш надёжный и удобный спутник в путешествиях по всему миру.",
@@ -223,7 +254,8 @@ window.ANAS_I18N = {
     brand_sub: "Flights | Tours | Visas",
 
     hero_eyebrow: "Flights · Tours · Visas",
-    hero_title_html: "Unforgettable <span class=\"gold-word\">Journeys</span> Around The World",
+    hero_title_html:
+      'Unforgettable <span class="gold-word">Journeys</span> Around The World',
     hero_lead:
       "Flight tickets, tour packages and visa services — all in one place. Reach your dream destinations with Anas Tour, comfortably and with confidence.",
     hero_btn_tours: "View tours",
@@ -295,13 +327,25 @@ window.ANAS_I18N = {
     form_submit: "Send request",
 
     reg_modal_title: "Sign up",
-    reg_modal_text: "Leave your phone number and our specialist will contact you shortly.",
+    reg_modal_text:
+      "Leave your phone number and we'll send a verification code by SMS.",
     reg_name_label: "Your name",
     reg_name_placeholder: "First and last name",
     reg_phone_label: "Phone number",
     reg_phone_placeholder: "+998 90 123 45 67",
-    reg_submit: "Sign up",
+    reg_send_code: "Send SMS code",
+    reg_sending_code: "Sending...",
+    reg_code_sent_to: "Code sent to:",
+    reg_change_phone: "change number",
+    reg_code_label: "Verification code",
+    reg_code_placeholder: "123456",
+    reg_code_error: "Code is incorrect or has expired.",
+    reg_resend: "Resend code",
+    reg_resend_wait: "Resend ({s}s)",
+    reg_submit: "Verify and sign up",
     reg_sending: "Sending...",
+    reg_phone_invalid: "Please enter a valid phone number.",
+    reg_otp_send_error: "Couldn't send the code. Please try again.",
 
     footer_desc:
       "Flights, tours and visa services. Your reliable and convenient companion for travel around the world.",
@@ -350,7 +394,10 @@ window.ANAS_I18N = {
       el.innerHTML = t(el.getAttribute("data-i18n-html"), lang);
     });
     document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
-      el.setAttribute("placeholder", t(el.getAttribute("data-i18n-placeholder"), lang));
+      el.setAttribute(
+        "placeholder",
+        t(el.getAttribute("data-i18n-placeholder"), lang),
+      );
     });
     document.querySelectorAll("[data-i18n-aria]").forEach(function (el) {
       el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria"), lang));
@@ -359,9 +406,14 @@ window.ANAS_I18N = {
     var label = document.getElementById("langLabel");
     if (label) label.textContent = lang.toUpperCase();
 
-    document.querySelectorAll(".lang-switch .dropdown-item").forEach(function (item) {
-      item.classList.toggle("active", item.dataset.lang.toLowerCase() === lang);
-    });
+    document
+      .querySelectorAll(".lang-switch .dropdown-item")
+      .forEach(function (item) {
+        item.classList.toggle(
+          "active",
+          item.dataset.lang.toLowerCase() === lang,
+        );
+      });
 
     // Re-render dynamic tour cards (they're built from data.js + main.js)
     if (typeof window.renderFeaturedTours === "function") {
@@ -369,7 +421,9 @@ window.ANAS_I18N = {
     }
 
     window.ANAS_CURRENT_LANG = lang;
-    document.dispatchEvent(new CustomEvent("anas:langchange", { detail: { lang: lang } }));
+    document.dispatchEvent(
+      new CustomEvent("anas:langchange", { detail: { lang: lang } }),
+    );
   }
 
   window.ANAS_I18N_ENGINE = {

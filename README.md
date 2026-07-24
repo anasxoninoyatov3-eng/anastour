@@ -26,31 +26,64 @@ pip install -r requirements.txt
 python server.py
 ```
 
-This starts an API on `http://localhost:5000` with one endpoint:
+This starts an API on `http://localhost:5000` with these endpoints:
 
-- `POST /api/notify` — body: `{"type": "registration"|"inquiry", "name", "phone", "service"?, "message"?, "lang"}`
+- `POST /api/send-otp` — body: `{"name", "phone"}` → generates a 6-digit
+  code, sends it via Eskiz.uz SMS, valid 5 minutes.
+- `POST /api/verify-otp` — body: `{"phone", "code"}` → checks the code;
+  on success, forwards the registration to Telegram automatically.
+- `POST /api/notify` — body: `{"type": "inquiry", "name", "phone", "service", "message", "lang"}`
+  — used by the plain contact form (no SMS step).
 
-The frontend calls `/api/notify` on the same origin by default. If you
-deploy the API on a different domain than the static site, set this in
-`index.html` before the other scripts load:
+The frontend calls these on the same origin by default. If you deploy the
+API on a different domain than the static site, set this in `index.html`
+before the other scripts load:
 
 ```html
 <script>window.ANAS_API_BASE = "https://api.yourdomain.com";</script>
 ```
 
-## Important: protect the bot token
+## Setting up Eskiz.uz SMS (required for the registration modal)
 
-`server.py` currently has the bot token hardcoded as a fallback so it
-works out of the box, but a bot token is a credential — anyone who has it
-can send messages as your bot. Before you put this on a public server or
-push it to git:
+1. Create an account at [eskiz.uz](https://eskiz.uz) if you don't have one.
+2. Set your credentials as environment variables before starting the server:
+   ```bash
+   export ESKIZ_EMAIL="you@example.com"
+   export ESKIZ_PASSWORD="your-eskiz-password"
+   ```
+3. **While your Eskiz account is still in "Тестовый" (test) status** —
+   check this under your account name on my.eskiz.uz — the server
+   defaults to `ESKIZ_TEST_MODE=true`, which automatically prefixes every
+   OTP text with the required phrase `"Bu Eskiz dan test - ..."`. Eskiz
+   only delivers messages containing that exact phrase in test mode, but
+   it will deliver them to **any real phone number**, not just your own —
+   so you can fully test the flow with real SMS right now.
+4. Once Eskiz approves your own sender nickname (apply via "Запрос
+   договора" in your Eskiz dashboard), switch to production mode:
+   ```bash
+   export ESKIZ_TEST_MODE="false"
+   export ESKIZ_FROM="YourApprovedNickname"
+   ```
+   This sends clean `"Anas Tour tasdiqlash kodi: 123456"` texts without
+   the test phrase.
+5. Restart `server.py` after changing any of these.
 
-- Set it as an environment variable instead: `export ANAS_BOT_TOKEN=...`
-- Add `server.py`'s hardcoded token to `.gitignore`-style handling, or
-  just delete the fallback value once your env var is confirmed working.
-- If the token ever leaks (e.g. pasted somewhere public), revoke it with
-  `@BotFather` → `/revoke` and generate a new one, then update the env
-  var.
+## Important: protect your credentials
+
+`server.py` currently has the Telegram bot token hardcoded as a fallback
+so it works out of the box, but a bot token and an SMS-provider password
+are credentials — anyone who has them can send messages as you. Before
+you put this on a public server or push it to git:
+
+- Set them as environment variables instead: `ANAS_BOT_TOKEN`,
+  `ESKIZ_EMAIL`, `ESKIZ_PASSWORD`.
+- Don't commit real values in `server.py` to a public repo.
+- If the Telegram token ever leaks, revoke it with `@BotFather` →
+  `/revoke` and generate a new one. If the Eskiz password leaks, change
+  it in the Eskiz.uz dashboard.
+- **Double-check `ANAS_CHAT_ID`.** Message your bot once, then open
+  `https://api.telegram.org/bot<token>/getUpdates` in a browser and read
+  the `"chat":{"id": ...}` field — use that exact number.
 
 ## Deploying
 
